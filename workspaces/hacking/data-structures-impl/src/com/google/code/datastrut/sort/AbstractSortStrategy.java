@@ -1,5 +1,6 @@
 package com.google.code.datastrut.sort;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -82,6 +83,42 @@ public abstract class AbstractSortStrategy {
         Type aux = arrayList[index2];
         arrayList[index2] = arrayList[index1];
         arrayList[index1] = aux;
+    }
+
+    /**
+     * Creates a new array of a given class type.
+     * @param clazz is the class of a given type
+     * @param length is the length of the array.
+     * @return the new array with the given number of slots.
+     * Mar 27, 2012 7:06:01 PM
+     */
+    @SuppressWarnings({"unchecked"})
+    public static <Type> Type[] newArray(Class<Type[]> clazz, int length) {
+        Preconditions.checkArgument(clazz != null, "The class of the array must be provided.");
+        Preconditions.checkArgument(length > -1, "The length must be greater or equals to 0.");
+
+        return (Type[])Array.newInstance(clazz.getComponentType(), length);
+    }
+
+    /**
+     * @param arrayList is the array list.
+     * @param startIndex is the start index.
+     * @param endIndex is the end index (inclusive - 1).
+     * @return The sub array from the given array using the start and end index.
+     * Mar 27, 2012 7:50:18 PM
+     */
+    public static <Type> Type[] getSubArray(Type[] arrayList, int startIndex, int endIndex) {
+        Preconditions.checkArgument(arrayList != null, "ArrayA cannot be null.");
+        Preconditions.checkArgument(arrayList.length > endIndex, "End index is out of bounds.");
+
+        @SuppressWarnings("unchecked")
+        Class<Type[]> arrayClass = (Class<Type[]>)arrayList.getClass();
+        int totalSize = (endIndex - startIndex) + 1;
+        Type[] subArray = newArray(arrayClass, totalSize);
+        for (int i = 0; startIndex <= endIndex; i++) {
+            subArray[i] = arrayList[startIndex++];
+        }
+        return subArray;
     }
 
     public static void main(String[] args) {
