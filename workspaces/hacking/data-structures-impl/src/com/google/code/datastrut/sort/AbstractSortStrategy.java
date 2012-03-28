@@ -6,10 +6,11 @@ import java.util.Random;
 
 import com.google.code.datastrut.list.ArrayList;
 import com.google.code.datastrut.sort.algorithm.BubbleSortStrategy;
+import com.google.code.datastrut.sort.algorithm.BucketInsertionSortStrategy;
 import com.google.code.datastrut.sort.algorithm.CocktailSortStrategy;
 import com.google.code.datastrut.sort.algorithm.InsertionSortStrategy;
+import com.google.code.datastrut.sort.algorithm.MergeSortStrategy;
 import com.google.code.datastrut.sort.algorithm.SelectionSortStrategy;
-import com.google.code.datastrut.sort.algorithm.BucketInsertionSortStrategy;
 import com.google.common.base.Preconditions;
 
 public abstract class AbstractSortStrategy {
@@ -32,8 +33,7 @@ public abstract class AbstractSortStrategy {
 
         BUCKET_SORT(BucketInsertionSortStrategy.getInstance()),
 
-        // TODO: to be implemented (Modified MergeSort from OpenJDK)
-        MERGE_SORT(null),
+        MERGE_SORT(MergeSortStrategy.getInstance()),
 
         // TODO: Implement 1 pivot, "Dual-Pivot" (Java 6)
         QUICK_SORT(null),
@@ -93,11 +93,14 @@ public abstract class AbstractSortStrategy {
      * Mar 27, 2012 7:06:01 PM
      */
     @SuppressWarnings({"unchecked"})
-    public static <Type> Type[] newArray(Class<Type[]> clazz, int length) {
-        Preconditions.checkArgument(clazz != null, "The class of the array must be provided.");
+    public static <Type> Type[] newArray(Type[] array, int length) {
+        Preconditions.checkArgument(array != null, "The class of the array must be provided.");
         Preconditions.checkArgument(length > -1, "The length must be greater or equals to 0.");
 
-        return (Type[])Array.newInstance(clazz.getComponentType(), length);
+        @SuppressWarnings("unchecked") // since both arrays are generically of the same type
+        Class<Type[]> arrayClass = (Class<Type[]>)array.getClass();
+
+        return (Type[])Array.newInstance(arrayClass.getComponentType(), length);
     }
 
     /**
@@ -108,13 +111,11 @@ public abstract class AbstractSortStrategy {
      * Mar 27, 2012 7:50:18 PM
      */
     public static <Type> Type[] getSubArray(Type[] arrayList, int startIndex, int endIndex) {
-        Preconditions.checkArgument(arrayList != null, "ArrayA cannot be null.");
-        Preconditions.checkArgument(arrayList.length > endIndex, "End index is out of bounds.");
+        Preconditions.checkArgument(arrayList != null, "Array cannot be null.");
+        Preconditions.checkArgument(endIndex < arrayList.length, "End index is out of bounds.");
 
-        @SuppressWarnings("unchecked")
-        Class<Type[]> arrayClass = (Class<Type[]>)arrayList.getClass();
         int totalSize = (endIndex - startIndex) + 1;
-        Type[] subArray = newArray(arrayClass, totalSize);
+        Type[] subArray = newArray(arrayList, totalSize);
         for (int i = 0; startIndex <= endIndex; i++) {
             subArray[i] = arrayList[startIndex++];
         }
