@@ -1,4 +1,4 @@
-package com.google.code.datastrut.graph;
+        package com.google.code.datastrut.graph;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -39,12 +39,12 @@ public class GraphImpl<Type> implements Graph<Type> {
         Preconditions.checkArgument(rootIndex >= 0, "The root index must be greater or equals to 0.");
         Preconditions.checkArgument(adjacencyMatrix != null, "The adjacency matrix must be provided.");
 
-        GraphImpl<String> newGraph = new GraphImpl<String>();
+        GraphImpl<String> newGraph = new GraphImpl<>();
         newGraph.rootIndex = rootIndex;
         newGraph.vertexes = new Vertex[vertexValues.length];
         for (int i = 0; i < adjacencyMatrix.length; i++) {
             List<String> connections = makeConnections(vertexValues, adjacencyMatrix, i);
-            newGraph.vertexes[i] = new Vertex<String>(vertexValues[i], connections);
+            newGraph.vertexes[i] = new Vertex<>(vertexValues[i], connections);
         }
         return newGraph;
     }
@@ -60,7 +60,7 @@ public class GraphImpl<Type> implements Graph<Type> {
         Preconditions.checkArgument(adjacencyMatrix != null, "The adjacency matrix must be provided.");
         Preconditions.checkArgument(vertexIndex >= 0, "The vertex index must be greater than or equals to 0.");
 
-        List<String> connections = new SinglyLinkedList<String>();
+        List<String> connections = new SinglyLinkedList<>();
         for (int i = 0; i < adjacencyMatrix.length; i++) {
             if (adjacencyMatrix[vertexIndex][i]) {
                 connections.add(vertexValues[i]);
@@ -146,6 +146,7 @@ public class GraphImpl<Type> implements Graph<Type> {
     /**
      * @return the root vertex chosen in the graph.
      */
+    @Override
     public Vertex<Type> getRootVertex() {
         return this.vertexes[this.rootIndex];
     }
@@ -179,7 +180,8 @@ public class GraphImpl<Type> implements Graph<Type> {
     /**
      * Resets the state of visited vertexes to not visited.
      */
-    private void resetVisitedStates() {
+    @Override
+    public void resetVisitedStates() {
         for (Vertex<Type> vertex : vertexes) {
             vertex.setAsNotVisited();
         }
@@ -190,13 +192,13 @@ public class GraphImpl<Type> implements Graph<Type> {
         this.resetVisitedStates();
         Iterator<Type> it = new Iterator<Type>() {
 
-            Stack<Vertex<Type>> stack = new StackImpl<Vertex<Type>>(getRootVertex());
+            Stack<Vertex<Type>> stack = new StackImpl<>(getRootVertex());
 
             @Override
             public boolean hasNext() {
                 if (!stack.isEmpty()) {
                     Vertex<Type> currentVertex = stack.pop();
-                    Stack<Vertex<Type>> poppedVertex = new StackImpl<Vertex<Type>>();
+                    Stack<Vertex<Type>> poppedVertex = new StackImpl<>();
                     poppedVertex.push(currentVertex);
                     boolean hasNext = false;
                     currentVertexSearch: while (currentVertex != null) {
@@ -283,14 +285,14 @@ public class GraphImpl<Type> implements Graph<Type> {
         this.resetVisitedStates();
         Iterator<Type> it = new Iterator<Type>() {
 
-            Queue<Vertex<Type>> queue = new QueueImpl<Vertex<Type>>();
+            Queue<Vertex<Type>> queue = new QueueImpl<>();
             Vertex<Type> currentlyWorking = getRootVertex();
 
             @Override
             public boolean hasNext() {
                 boolean hasNext = false;
                 if (currentlyWorking != null) {
-                    Queue<Vertex<Type>> dequeuedVertexes = new QueueImpl<Vertex<Type>>();
+                    Queue<Vertex<Type>> dequeuedVertexes = new QueueImpl<>();
                     currentVertexSearch: while (currentlyWorking != null) {
                         if (currentlyWorking.hasBeenVisited()) {
                             Iterator<Type> it = currentlyWorking.getConnections().iterator();
