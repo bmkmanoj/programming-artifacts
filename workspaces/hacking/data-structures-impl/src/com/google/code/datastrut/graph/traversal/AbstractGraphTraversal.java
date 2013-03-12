@@ -2,6 +2,10 @@ package com.google.code.datastrut.graph.traversal;
 
 import java.util.Iterator;
 
+import com.google.code.datastrut.dictionary.tree.BinarySearchTree;
+import com.google.code.datastrut.dictionary.tree.traversal.InOrderTraversal;
+import com.google.code.datastrut.dictionary.tree.traversal.PostOrderTraversal;
+import com.google.code.datastrut.dictionary.tree.traversal.PreOrderTraversal;
 import com.google.code.datastrut.graph.Graph;
 import com.google.code.datastrut.graph.GraphImpl;
 import com.google.code.datastrut.graph.Vertex;
@@ -38,9 +42,18 @@ public abstract class AbstractGraphTraversal<Type> implements Iterable<Type> {
    * @author Marcello de Sales (marcello.desales@gmail.com)
    *
    */
-  public static enum TraverseAlgorithm {
+  public static enum TraversalAlgorithm {
       BREDTH_FIRST_SEARCH,
-      DEPTH_FIRST_SEARCH
+      DEPTH_FIRST_SEARCH;
+
+      public <Type> Iterator<Type> traverse(Graph<Type> graph) {
+        switch (this) {
+          case BREDTH_FIRST_SEARCH: return new BredthFirstSearchTraversal<>(graph).iterator();
+          case DEPTH_FIRST_SEARCH: return new DepthFirstSearchTraversal<>(graph).iterator();
+          default:
+            return null;
+        }
+      }
   }
 
   /**
@@ -87,8 +100,7 @@ public abstract class AbstractGraphTraversal<Type> implements Iterable<Type> {
     System.out.println(letterGraph);
 
     System.out.println("The Depth First Search (DFS) elements WITH ALGORITHM IMPLEMENTATION");
-    AbstractGraphTraversal<String> traversal = new DepthFirstTraversal<>(letterGraph);
-    Iterator<String> dfsIterator2 =  traversal.iterator();
+    Iterator<String> dfsIterator2 =  TraversalAlgorithm.DEPTH_FIRST_SEARCH.traverse(letterGraph);
     while (dfsIterator2.hasNext()) {
         String value = dfsIterator2.next();
         if (dfsIterator2.hasNext()) {
@@ -100,8 +112,7 @@ public abstract class AbstractGraphTraversal<Type> implements Iterable<Type> {
 
     System.out.println("");
     System.out.println("The Breadth First Search (BFS) elements WITH ALGORITHM IMPLEMENTATION");
-    AbstractGraphTraversal<String> traversal2 = new BredthFirstTraversal<>(letterGraph);
-    Iterator<String> bfsIterator2 =  traversal2.iterator();
+    Iterator<String> bfsIterator2 =  TraversalAlgorithm.BREDTH_FIRST_SEARCH.traverse(letterGraph);
     while (bfsIterator2.hasNext()) {
         String value = bfsIterator2.next();
         if (bfsIterator2.hasNext()) {

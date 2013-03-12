@@ -15,18 +15,18 @@ import com.google.code.datastrut.stack.StackImpl;
  *
  * @param <Type>
  */
-public class DepthFirstTraversal<Type> extends AbstractGraphTraversal<Type> {
+public class DepthFirstSearchTraversal<Type> extends AbstractGraphTraversal<Type> {
 
   /**
    * The stack of vertexes where the elements are marked to be visited.
    */
   private Stack<Vertex<Type>> stack = new StackImpl<>();
 
-  protected DepthFirstTraversal(Graph<Type> newGraph) {
+  protected DepthFirstSearchTraversal(Graph<Type> newGraph) {
     super(newGraph);
   }
 
-  protected DepthFirstTraversal(Graph<Type> newGraph, Type initialValue) {
+  protected DepthFirstSearchTraversal(Graph<Type> newGraph, Type initialValue) {
     super(newGraph, initialValue);
   }
 

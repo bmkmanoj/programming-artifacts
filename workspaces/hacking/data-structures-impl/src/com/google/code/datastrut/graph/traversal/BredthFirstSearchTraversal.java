@@ -15,14 +15,14 @@ import com.google.code.datastrut.queue.QueueImpl;
  *
  * @param <Type>
  */
-public class BredthFirstTraversal<Type> extends AbstractGraphTraversal<Type> {
+public class BredthFirstSearchTraversal<Type> extends AbstractGraphTraversal<Type> {
 
   /**
    * The queue to hold the neighbor connections from the initial chosen vertex.
    */
   private Queue<Vertex<Type>> queue = new QueueImpl<>();
 
-  protected BredthFirstTraversal(Graph<Type> newGraph) {
+  protected BredthFirstSearchTraversal(Graph<Type> newGraph) {
     super(newGraph);
   }
 
